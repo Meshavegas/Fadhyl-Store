@@ -1,4 +1,4 @@
-import { defineType } from "sanity";
+import { User, defineType } from "sanity";
 
 export const cathegorie = defineType({
   name: "category",
@@ -12,9 +12,16 @@ export const cathegorie = defineType({
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "name" },
+    },
+    {
       name: "description",
       title: "Description de la catégorie",
-      type: "text",
+      type: "array",
+      of: [{ type: "block" }],
     },
   ],
 });
@@ -32,9 +39,16 @@ export const produit = defineType({
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "name" },
+    },
+    {
       name: "description",
       title: "Description du produit",
-      type: "text",
+      type: "array",
+      of: [{ type: "block" }],
     },
     {
       name: "price",
@@ -129,6 +143,18 @@ export const user = defineType({
       title: "Nom complet",
       type: "string",
       validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "pwd",
+      title: "Mot de passe",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "name" },
     },
     {
       name: "email",
