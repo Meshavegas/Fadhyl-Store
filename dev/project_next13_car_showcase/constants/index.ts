@@ -57,40 +57,40 @@ export const yearsOfProduction = [
 
 export const fuels = [
   {
-    title: "Fuel",
+    title: "Cathegories",
     value: "",
   },
   {
-    title: "Gas",
+    title: "cathe",
     value: "Gas",
   },
   {
-    title: "Electricity",
+    title: "Dda",
     value: "Electricity",
   },
 ];
 
 export const footerLinks = [
   {
-    title: "About",
+    title: "A propos",
     links: [
-      { title: "How it works", url: "/" },
-      { title: "Featured", url: "/" },
-      { title: "Partnership", url: "/" },
-      { title: "Bussiness Relation", url: "/" },
+      { title: "Comment ca marche", url: "/" },
+      { title: "En vedette", url: "/" },
+      { title: "Partenariat", url: "/" },
+      { title: "Relation commerciale", url: "/" },
     ],
   },
   {
-    title: "Company",
+    title: "Entreprise",
     links: [
-      { title: "Events", url: "/" },
+      { title: "Événements", url: "/" },
       { title: "Blog", url: "/" },
       { title: "Podcast", url: "/" },
-      { title: "Invite a friend", url: "/" },
+      { title: "Invitez un ami", url: "/" },
     ],
   },
   {
-    title: "Socials",
+    title: "Réseaux sociaux",
     links: [
       { title: "Discord", url: "/" },
       { title: "Instagram", url: "/" },
