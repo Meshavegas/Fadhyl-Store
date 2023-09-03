@@ -47,15 +47,15 @@ export default async function Home({ searchParams }: HomeProps) {
         {!isDataEmpty ? (
           <section>
             <div className="home__cars-wrapper">
-              {produts?.map((car) => (
-                <CarCard produts={car} />
+              {produts?.map((car, i) => (
+                <CarCard produts={car} key={car._id + i} />
               ))}
             </div>
 
-            <ShowMore
+            {/* <ShowMore
               pageNumber={(searchParams.limit || 10) / 10}
               isNext={(searchParams.limit || 10) > produts.length}
-            />
+            /> */}
           </section>
         ) : (
           <div className="home__error-container">
