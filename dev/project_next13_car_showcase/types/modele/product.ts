@@ -16,7 +16,7 @@ export type Product = {
   name: string;
   slug: string;
   description: PortableTextBlock[];
-  price: string;
+  price: number;
   stock: number;
   category: Category[];
   images: image[];
