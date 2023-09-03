@@ -48,7 +48,8 @@ const CarCard = ({ produts }: CarCardProps) => {
         />
       </div>
 
-      {/* <div className='relative flex w-full mt-2'>
+      <div className="relative flex w-full mt-2">
+        {/* 
         <div className='flex group-hover:invisible w-full justify-between text-grey'>
           <div className='flex flex-col justify-center items-center gap-2'>
             <Image src='/steering-wheel.svg' width={20} height={20} alt='steering wheel' />
@@ -65,19 +66,24 @@ const CarCard = ({ produts }: CarCardProps) => {
             <p className="car-card__icon-text">{city_mpg} MPG</p>
           </div>
         </div>
+      */}
 
         <div className="car-card__btn-container">
           <CustomButton
-            title='View More'
-            containerStyles='w-full py-[16px] rounded-full bg-primary-blue'
-            textStyles='text-white text-[14px] leading-[17px] font-bold'
-            rightIcon='/right-arrow.svg'
+            title="View More"
+            containerStyles="w-full py-[16px] rounded-full bg-primary-blue"
+            textStyles="text-white text-[14px] leading-[17px] font-bold"
+            rightIcon="/right-arrow.svg"
             handleClick={() => setIsOpen(true)}
           />
         </div>
-      </div> */}
+      </div>
 
-      {/* <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={produts} /> */}
+      <CarDetails
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        car={produts}
+      />
     </div>
   );
 };
