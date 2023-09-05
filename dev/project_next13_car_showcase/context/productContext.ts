@@ -1,4 +1,4 @@
-import { Product } from "@types/modele/product";
+import { Product } from "../types/modele/product";
 import { createContext, useContext } from "react";
 
 interface IProductContext {
@@ -7,7 +7,7 @@ interface IProductContext {
 }
 
 export const ProductContext = createContext<IProductContext>({
-  product: [],
+  products: [],
   addProduct(product) {},
 });
 
