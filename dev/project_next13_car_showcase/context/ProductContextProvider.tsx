@@ -1,4 +1,4 @@
-import { Product } from "@types/modele/product";
+import { Product } from "../types/modele/product";
 import React, { ReactNode, useState } from "react";
 import { ProductContext } from "./productContext";
 interface IProps {
