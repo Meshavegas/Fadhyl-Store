@@ -6,10 +6,14 @@ import CustomButton from "./CustomButton";
 import SignIn from "./SignIn";
 import { useState } from "react";
 import Login from "./Login";
+import { useProductContext } from "@context/productContext";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+
+  const { products } = useProductContext();
+  console.log(products);
   return (
     <header className="w-full bg-purple-100 fixed z-40">
       <nav className="max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 px-6 py-2 bg-transparent">
@@ -24,6 +28,11 @@ const NavBar = () => {
           <span className=" text-2xl font-extrabold ml-4">Fadhyl Store</span>
         </Link>
 
+        <div className=" text-2xl">
+          <a className="" href="./panier">
+            Panier({products.length})
+          </a>
+        </div>
         {/* <CustomButton
       
         title="S'inscrire"

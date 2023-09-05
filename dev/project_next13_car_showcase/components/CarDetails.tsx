@@ -6,6 +6,7 @@ import { CarProps } from "@types";
 import { generateCarImageUrl } from "@utils";
 import { Product } from "../types/modele/product";
 import { PortableText } from "@portabletext/react";
+import { useProductContext } from "@context/productContext";
 
 interface CarDetailsProps {
   isOpen: boolean;
@@ -14,12 +15,14 @@ interface CarDetailsProps {
 }
 
 const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
-  const number = 123456.789;
   const formattedPrice = new Intl.NumberFormat("cm-CM", {
     style: "currency",
     currency: "XAF",
   });
-
+  const { addProduct } = useProductContext();
+  const handleAdd = () => {
+    addProduct(car);
+  };
   // Expected output: "123.456,79 €"
   // const intl = useIntl();
   // const formattedPrice = (price: number) =>
@@ -109,6 +112,12 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
                       </div>
                       <div className=" text-3xl text-amber-950 font-bold">
                         {formattedPrice.format(car.price)}
+                      </div>
+                      <div
+                        onClick={handleAdd}
+                        className=" mt-3 cursor-pointer bg-primary-blue rounded-xl px-4 py-2 text-white text-2xl font-bold text-center"
+                      >
+                        Ajouter au panier
                       </div>
                     </div>
                   </div>
