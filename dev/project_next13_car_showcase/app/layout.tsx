@@ -1,3 +1,4 @@
+import ProductContextProvider from "@context/ProductContextProvider";
 import "./globals.css";
 
 import { Footer, NavBar } from "@components";
@@ -15,8 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="relative">
-        {children}
-        <Footer />
+        <ProductContextProvider>
+          <NavBar />
+          {children}
+          <Footer />
+        </ProductContextProvider>
       </body>
     </html>
   );
