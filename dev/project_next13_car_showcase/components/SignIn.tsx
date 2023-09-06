@@ -25,12 +25,24 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
     address: "",
     phone: "",
   });
+  const [formData2, setFormData2] = useState({
+    email: "",
+    password: "",
+  });
+  const [switchForm, setSwitchForm] = useState(true);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleChange2 = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData2({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -109,99 +121,170 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
                       className="object-contain"
                     />
                   </button>
-                  <div className=" flex gap-3">
-                    <div className="container mx-auto mt-10">
-                      <h1 className="text-2xl font-bold mb-4">Inscription</h1>
-                      <form onSubmit={handleSubmit} className="max-w-md">
-                        <div className="mb-4">
-                          <label htmlFor="name" className="block font-semibold">
-                            Nom complet
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            className="border rounded px-2 py-1 w-full"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label
-                            htmlFor="email"
-                            className="block font-semibold"
+                  {switchForm ? (
+                    <div className=" flex gap-3">
+                      <div className="container mx-auto mt-10">
+                        <h1 className="text-2xl font-bold mb-4">Inscription</h1>
+                        <form onSubmit={handleSubmit} className="max-w-md">
+                          <div className="mb-4">
+                            <label
+                              htmlFor="email"
+                              className="block font-semibold"
+                            >
+                              Adresse e-mail
+                            </label>
+                            <input
+                              type="email"
+                              id="email"
+                              name="email"
+                              className="border rounded px-2 py-1 w-full"
+                              value={formData.email}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="password"
+                              className="block font-semibold"
+                            >
+                              Mot de passe
+                            </label>
+                            <input
+                              type="password"
+                              id="password"
+                              name="password"
+                              className="border rounded px-2 py-1 w-full"
+                              value={formData.password}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
                           >
-                            Adresse e-mail
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            className="border rounded px-2 py-1 w-full"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label
-                            htmlFor="password"
-                            className="block font-semibold"
-                          >
-                            Mot de passe
-                          </label>
-                          <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            className="border rounded px-2 py-1 w-full"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label
-                            htmlFor="address"
-                            className="block font-semibold"
-                          >
-                            Adresse de livraison
-                          </label>
-                          <textarea
-                            id="address"
-                            name="address"
-                            className="border rounded px-2 py-1 w-full"
-                            value={formData.address}
-                            onChange={handleChange}
-                            required
-                          ></textarea>
-                        </div>
-                        <div className="mb-4">
-                          <label
-                            htmlFor="phone"
-                            className="block font-semibold"
-                          >
-                            Numéro de téléphone
-                          </label>
-                          <input
-                            type="text"
-                            id="phone"
-                            name="phone"
-                            className="border rounded px-2 py-1 w-full"
-                            value={formData.phone}
-                            onChange={handleChange}
-                          />
-                        </div>
-                        <button
-                          type="submit"
-                          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                            Se connecter
+                          </button>
+                        </form>
+                        <div
+                          className=""
+                          onClick={() => setSwitchForm(!switchForm)}
                         >
-                          S'inscrire
-                        </button>
-                      </form>
+                          {" "}
+                          vous n'avez pas de compte{" "}
+                          <span className=" text-primary-blue">S'incrire</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className=" flex gap-3">
+                      <div className="container mx-auto mt-10">
+                        <h1 className="text-2xl font-bold mb-4">Inscription</h1>
+                        <form onSubmit={handleSubmit} className="max-w-md">
+                          <div className="mb-4">
+                            <label
+                              htmlFor="name"
+                              className="block font-semibold"
+                            >
+                              Nom complet
+                            </label>
+                            <input
+                              type="text"
+                              id="name"
+                              name="name"
+                              className="border rounded px-2 py-1 w-full"
+                              value={formData.name}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="email"
+                              className="block font-semibold"
+                            >
+                              Adresse e-mail
+                            </label>
+                            <input
+                              type="email"
+                              id="email"
+                              name="email"
+                              className="border rounded px-2 py-1 w-full"
+                              value={formData.email}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="password"
+                              className="block font-semibold"
+                            >
+                              Mot de passe
+                            </label>
+                            <input
+                              type="password"
+                              id="password"
+                              name="password"
+                              className="border rounded px-2 py-1 w-full"
+                              value={formData.password}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="address"
+                              className="block font-semibold"
+                            >
+                              Adresse de livraison
+                            </label>
+                            <textarea
+                              id="address"
+                              name="address"
+                              className="border rounded px-2 py-1 w-full"
+                              value={formData.address}
+                              onChange={handleChange}
+                              required
+                            ></textarea>
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="phone"
+                              className="block font-semibold"
+                            >
+                              Numéro de téléphone
+                            </label>
+                            <input
+                              type="text"
+                              id="phone"
+                              name="phone"
+                              className="border rounded px-2 py-1 w-full"
+                              value={formData.phone}
+                              onChange={handleChange}
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                          >
+                            S'inscrire
+                          </button>
+                        </form>
+                        <div
+                          className=""
+                          onClick={() => setSwitchForm(!switchForm)}
+                        >
+                          Vous avez deja un compte{" "}
+                          <span className=" text-primary-blue">
+                            se connecter
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
