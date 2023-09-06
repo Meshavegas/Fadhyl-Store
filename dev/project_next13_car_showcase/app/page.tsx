@@ -1,6 +1,5 @@
 "use client";
 import { fetchCars } from "@utils";
-import { HomeProps } from "@types";
 import { fuels, yearsOfProduction } from "@constants";
 import {
   CarCard,
@@ -11,15 +10,16 @@ import {
   NavBar,
 } from "@components";
 import { getProducts } from "@sanity/utils/produts";
+import { useEffect } from "react";
 
-export default async function Home({ searchParams }: HomeProps) {
+export default async function Home() {
   // const allCars = await fetchCars({
   //   manufacturer: searchParams.manufacturer || "",
   //   year: searchParams.year || 2022,
   //   fuel: searchParams.fuel || "",
   //   limit: searchParams.limit || 10,
   //   model: searchParams.model || "",
-  // });
+  // });s
   const produts = await getProducts();
 
   const isDataEmpty = !Array.isArray(produts) || produts.length < 1 || !produts;
