@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 
 import { hashPasse } from "@sanity/utils/hash";
-import { createUser } from "@sanity/utils/produts";
+import { createUser, login } from "@sanity/utils/produts";
 import { User } from "../types/modele/user";
 
 interface CarDetailsProps {
@@ -42,9 +42,13 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData2({ ...formData, [name]: value });
+    setFormData2({ ...formData2, [name]: value });
   };
 
+  const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    login(formData2.email, hashPasse(formData2.password).toString());
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -52,8 +56,8 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
       _type: "user",
       _id: "_.groups.corePagesEditors",
       _rev: "null",
-      _createdAt: "",
-      _updatedAt: "",
+      _createdAt: null,
+      _updatedAt: null,
       name: formData.name,
       pwd: hashPasse(formData.password).toString(),
       slug: "",
@@ -124,8 +128,8 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
                   {switchForm ? (
                     <div className=" flex gap-3">
                       <div className="container mx-auto mt-10">
-                        <h1 className="text-2xl font-bold mb-4">Inscription</h1>
-                        <form onSubmit={handleSubmit} className="max-w-md">
+                        <h1 className="text-2xl font-bold mb-4">Connexion</h1>
+                        <form onSubmit={handlelogin} className="max-w-md">
                           <div className="mb-4">
                             <label
                               htmlFor="email"
@@ -138,8 +142,8 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
                               id="email"
                               name="email"
                               className="border rounded px-2 py-1 w-full"
-                              value={formData.email}
-                              onChange={handleChange}
+                              value={formData2.email}
+                              onChange={handleChange2}
                               required
                             />
                           </div>
@@ -155,8 +159,8 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
                               id="password"
                               name="password"
                               className="border rounded px-2 py-1 w-full"
-                              value={formData.password}
-                              onChange={handleChange}
+                              value={formData2.password}
+                              onChange={handleChange2}
                               required
                             />
                           </div>

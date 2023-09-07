@@ -5,7 +5,7 @@ import { User } from "../../types/modele/user";
 import configC from "@sanity/config/client";
 
 export async function getProducts(): Promise<Product[]> {
-  return createClient(configC).fetch(
+  return configC.fetch(
     groq`*[_type == "product"]{
        _id,name,"slug":slug.current,
   description,
@@ -20,42 +20,27 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function createUser(user: User) {
-  const client = createClient(configC);
-  const apiUrl = "https://votre-projet.api.sanity.io/v1/data/query/production";
-  fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer sk4hFrE2OsKEO0DGVCIw0rka12qGvhwi6RRkcH1qvXQTzkZXgHmCjt8oQBS8RPOyY3fORkkDAQTDLeDb1j2fHvGQrAh53l4cTuelYNme5W8M6wdXDTCH7pu9J9HZQtLZp3eGg4saZXeYFCo5lE9QCz9Gt53CWslnzb0Dy8B1hisYVN2u3LM0`, // Inclure le token dans l'en-tête
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user), // Envoyer la requête GROQ sous forme de JSON
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // Traitez la réponse ici
-      console.log(data);
-    })
-    .catch((error) => {
-      // Gérez les erreurs ici
-      console.error(error);
-    });
-
-  const doct = {
-    ...user,
-    _type: "system.group",
-    grants: [
-      {
-        filter: "_type == 'corePage'",
-        permissions: ["manage"],
-      },
-    ],
-  };
   try {
-    client.createIfNotExists(doct).then((res) => {
-      return res;
-    });
+    const createdUser = await configC.create(user); // Utilisez "await" pour attendre la réponse
+    console.log("Utilisateur créé avec succès :", createdUser);
+    return createdUser;
   } catch (error) {
     console.log("Erreur lors de la création de l'utilisateur :", error);
-    // throw error;
+    // throw error; // Propagez l'erreur pour la gérer en amont si nécessaire
   }
+}
+
+export async function login(email: string, mdp: string) {
+  console.log(mdp);
+  const query = groq`*[
+    _type=="user" && email==$email && pwd==$mdp
+  ][0]`;
+  configC
+    .fetch(query, { email, mdp })
+    .then((response) => {
+      console.log("doc exiat", response);
+    })
+    .catch((error) => {
+      console.log("Erreur", error);
+    });
 }

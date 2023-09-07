@@ -3,8 +3,8 @@ export type User = {
   _type: "user";
   _id: string;
   _rev: string;
-  _createdAt: string;
-  _updatedAt: string;
+  _createdAt: string | null;
+  _updatedAt: string | null;
   name: string;
   pwd: string;
   slug: string;
