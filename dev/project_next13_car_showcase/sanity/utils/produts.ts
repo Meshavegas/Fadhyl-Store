@@ -30,17 +30,23 @@ export async function createUser(user: User) {
   }
 }
 
-export async function login(email: string, mdp: string) {
-  console.log(mdp);
-  const query = groq`*[
+export async function loginFecth(
+  email: string,
+  mdp: string
+): Promise<User | null> {
+  // console.log(mdp);
+  try {
+    const query = groq`*[
     _type=="user" && email==$email && pwd==$mdp
   ][0]`;
-  configC
-    .fetch(query, { email, mdp })
-    .then((response) => {
-      console.log("doc exiat", response);
-    })
-    .catch((error) => {
-      console.log("Erreur", error);
-    });
+    const response = await configC.fetch(query, { email, mdp });
+    if (response) {
+      return response;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Erreur", error);
+    throw error;
+  }
 }

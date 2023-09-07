@@ -173,5 +173,13 @@ export const user = defineType({
       title: "Numéro de téléphone",
       type: "string",
     },
+    {
+      name: "profil",
+      title: "Photo de profil",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    },
   ],
 });

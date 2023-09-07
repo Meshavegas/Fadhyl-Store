@@ -5,8 +5,9 @@ import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 
 import { hashPasse } from "@sanity/utils/hash";
-import { createUser, login } from "@sanity/utils/produts";
+import { createUser, loginFecth } from "@sanity/utils/produts";
 import { User } from "../types/modele/user";
+import { useUserContext } from "@context/user/userContext";
 
 interface CarDetailsProps {
   isOpen: boolean;
@@ -30,7 +31,7 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
     password: "",
   });
   const [switchForm, setSwitchForm] = useState(true);
-
+  const { user, login } = useUserContext();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -47,7 +48,20 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
 
   const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login(formData2.email, hashPasse(formData2.password).toString());
+    const data = loginFecth(
+      formData2.email,
+      hashPasse(formData2.password).toString()
+    );
+    data.then((response) => {
+      if (!response) {
+        return alert("Email ou mot de passe incorrect");
+      } else {
+        login(response);
+        closeModal();
+        console.log("ok", response);
+      }
+    });
+    console.log();
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,6 +78,7 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
       email: formData.email,
       address: formData.address,
       phone: formData.phone,
+      profil: "",
     };
     //     userData.address = formData.address;
     call(userData);
@@ -173,11 +188,10 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
                           </button>
                         </form>
                         <div
-                          className=""
+                          className=" cursor-pointer"
                           onClick={() => setSwitchForm(!switchForm)}
                         >
-                          {" "}
-                          vous n'avez pas de compte{" "}
+                          vous n'avez pas de compte
                           <span className=" text-primary-blue">S'incrire</span>
                         </div>
                       </div>

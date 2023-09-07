@@ -18,12 +18,14 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
   const { products, addProduct, addOneProduct } = useProductContext();
   const { user } = useUserContext();
   const [formData, setFormData] = useState({
-    email: user?.email || "",
+    email: "" ,
     ville: "Ville...",
-    tel: user?.phone || 678,
+    tel: "",
     quartier: "",
-    nom: user?.name || "",
+    nom: "",
   });
+  
+  user && 
 
   const handleChange = (
     e: React.ChangeEvent<

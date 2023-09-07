@@ -1,4 +1,11 @@
 import { PortableTextBlock } from "sanity";
+type url = {
+  url: string;
+};
+
+type image = {
+  asset: url;
+};
 export type User = {
   _type: "user";
   _id: string;
@@ -11,4 +18,5 @@ export type User = {
   email: string;
   address: string;
   phone?: string | null;
+  profil?: image;
 };

@@ -2,6 +2,7 @@ import ProductContextProvider from "@context/ProductContextProvider";
 import "./globals.css";
 
 import { Footer, NavBar } from "@components";
+import UserContextProvider from "@context/user/usercontextProvider";
 
 export const metadata = {
   title: "Fadhyl Store",
@@ -16,11 +17,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="relative">
-        <ProductContextProvider>
-          <NavBar />
-          {children}
-          <Footer />
-        </ProductContextProvider>
+        <UserContextProvider>
+          <ProductContextProvider>
+            <NavBar />
+            {children}
+            <Footer />
+          </ProductContextProvider>
+        </UserContextProvider>
       </body>
     </html>
   );

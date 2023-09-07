@@ -8,10 +8,13 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useProductContext } from "@context/productContext";
 import Panier from "./Panier";
+import { useUserContext } from "@context/user/userContext";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+
+  const { user, login } = useUserContext();
 
   const { products } = useProductContext();
 
@@ -44,12 +47,18 @@ const NavBar = () => {
               Panier({products.length})
             </a>
           </div>
-          <div
-            className=" bg-secondary-orange text-2xl px-6 py-2 rounded-full font-bold cursor-pointer"
-            onClick={() => setIsOpen(true)}
-          >
-            LogIn
-          </div>
+          {user ? (
+            <div className=" bg-secondary-orange text-2xl px-6 py-2 rounded-full font-bold cursor-pointer">
+              {user.name}
+            </div>
+          ) : (
+            <div
+              className=" bg-secondary-orange text-2xl px-6 py-2 rounded-full font-bold cursor-pointer"
+              onClick={() => setIsOpen(true)}
+            >
+              LogIn
+            </div>
+          )}
         </div>
       </nav>
       <SignIn isOpen={isOpen} closeModal={() => setIsOpen(false)} />
