@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-09-08T06:57:30.757Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="vCOnuZwVt6WA_J3ClR7X" version="21.7.1" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-08T06:58:41.256Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="4JCIq7CaGIA1pNRl7srJ" version="21.7.1" type="github">
   <diagram name="Page-1" id="97916047-d0de-89f5-080d-49f4d83e522f">
     <mxGraphModel dx="2049" dy="1140" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="1169" pageHeight="827" background="none" math="0" shadow="0">
       <root>
@@ -7,7 +7,7 @@
         <mxCell id="2" value="CEO&#xa;Jacques Bonjawo" style="rounded=1;fillColor=#10739E;strokeColor=none;shadow=1;gradientColor=none;fontStyle=1;fontColor=#FFFFFF;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="672" y="50" width="494" height="105.5" as="geometry" />
         </mxCell>
-        <mxCell id="3" value="Direction des affaire accademique" style="rounded=1;fillColor=#10739E;strokeColor=none;shadow=1;gradientColor=none;fontStyle=1;fontColor=#FFFFFF;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="3" value="Directrice Académique" style="rounded=1;fillColor=#10739E;strokeColor=none;shadow=1;gradientColor=none;fontStyle=1;fontColor=#FFFFFF;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="745" y="500" width="348" height="60" as="geometry" />
         </mxCell>
         <mxCell id="7" value="Chief Technology Officer&#xa;Dorian Nogneng" style="rounded=1;fillColor=#10739E;strokeColor=none;shadow=1;gradientColor=none;fontStyle=1;fontColor=#FFFFFF;fontSize=18;" parent="1" vertex="1">
