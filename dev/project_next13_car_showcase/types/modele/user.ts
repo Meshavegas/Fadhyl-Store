@@ -1,9 +1,9 @@
 import { PortableTextBlock } from "sanity";
-type url = {
+export type url = {
   url: string;
 };
 
-type image = {
+export type image = {
   asset: url;
 };
 export type User = {

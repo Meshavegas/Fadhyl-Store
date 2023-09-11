@@ -6,7 +6,7 @@ import { Dialog, Transition } from "@headlessui/react";
 
 import { hashPasse } from "@sanity/utils/hash";
 import { createUser, loginFecth } from "@sanity/utils/produts";
-import { User } from "../types/modele/user";
+import { User, image, url } from "../types/modele/user";
 import { useUserContext } from "@context/user/userContext";
 
 interface CarDetailsProps {
@@ -66,6 +66,12 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const url: url = {
+      url: "",
+    };
+    const img: image = {
+      asset: url,
+    };
     let userData: User = {
       _type: "user",
       _id: "_.groups.corePagesEditors",
@@ -78,7 +84,7 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
       email: formData.email,
       address: formData.address,
       phone: formData.phone,
-      profil: "",
+      profil: img,
     };
     //     userData.address = formData.address;
     call(userData);
