@@ -25,7 +25,6 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
     nom: "",
   });
   
-  user && 
 
   const handleChange = (
     e: React.ChangeEvent<
