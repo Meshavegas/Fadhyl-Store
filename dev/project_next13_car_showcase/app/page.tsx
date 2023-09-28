@@ -26,6 +26,7 @@ export default async function Home() {
 
   return (
     <main className="overflow-hidden">
+      <NavBar />
       <Hero />
 
       <div className="mt-12 padding-x padding-y max-width" id="discover">

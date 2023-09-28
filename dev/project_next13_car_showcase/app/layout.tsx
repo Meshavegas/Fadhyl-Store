@@ -19,7 +19,6 @@ export default function RootLayout({
       <body className="relative">
         <UserContextProvider>
           <ProductContextProvider>
-            <NavBar />
             {children}
             <Footer />
           </ProductContextProvider>
