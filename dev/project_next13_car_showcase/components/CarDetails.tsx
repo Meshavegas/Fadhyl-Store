@@ -86,10 +86,10 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
                           {car.images.map((p, i) => (
                             <div
                               className="flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg"
-                              key={i + p.asset.url}
+                              key={i + p.asset?.url}
                             >
                               <Image
-                                src={p.asset.url}
+                                src={p.asset?.url}
                                 alt="car model"
                                 fill
                                 priority
