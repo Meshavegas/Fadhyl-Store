@@ -38,7 +38,7 @@ const NavBar = () => {
         btnType="button"
         containerStyles="text-primary-blue rounded-full bg-white min-w-[130px]"
       /> */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 md:flex-row flex-col">
           <div
             className=" bg-white text-2xl px-6 py-2 rounded-full font-bold cursor-pointer"
             // onClick={() => setIsOpen(true)}
@@ -56,7 +56,7 @@ const NavBar = () => {
               className=" bg-secondary-orange text-2xl px-6 py-2 rounded-full font-bold cursor-pointer"
               onClick={() => setIsOpen(true)}
             >
-              LogIn
+              Connecter
             </div>
           )}
         </div>
