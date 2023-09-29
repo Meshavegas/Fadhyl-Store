@@ -6,12 +6,14 @@ interface IProductContext {
   products: ProductInOrder[];
   addProduct: (product: Product) => void;
   addOneProduct: (product: ProductInOrder[]) => void;
+  removeProduct: (id: string) => void;
 }
 
 export const ProductContext = createContext<IProductContext>({
   products: [],
   addProduct(product) {},
   addOneProduct(product) {},
+  removeProduct(id) {},
 });
 
 export const useProductContext = () => useContext(ProductContext);
