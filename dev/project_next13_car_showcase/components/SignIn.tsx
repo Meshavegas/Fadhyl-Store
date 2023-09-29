@@ -14,6 +14,7 @@ interface CarDetailsProps {
   closeModal: () => void;
 }
 
+type returnType = (user: User) => Promise<boolean>;
 const call = async (user: User) => {
   const det = await createUser(user);
   // console.log(det);
@@ -65,6 +66,13 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // var characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    // var result = "";
+    // var chaactersLength = characters.length;
+
+    // for (var i = 0; i < 10; i++) {
+    //   result += characters.charAt(Math.floor(Math.random() * chaactersLength));
+    // }
 
     const url: url = {
       url: "",
@@ -86,24 +94,9 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
       phone: formData.phone,
       profil: img,
     };
-    //     userData.address = formData.address;
-    call(userData);
-    //     console.log();
-
-    //     bcrypt.genSalt(10, function (saltError, salt) {
-    //       if (saltError) {
-    //         return saltError;
-    //       } else {
-    //         bcrypt.hash(formData.password, salt, function (hasEror, hash) {
-    //           if (hasEror) {
-    //             return hasEror;
-    //           }
-    //           return hash;
-    //         });
-    //       }
-    //     })
-    // Effectuez la requête pour créer un nouvel utilisateur dans votre backend Sanity
-    // Utilisez JavaScript ou une bibliothèque comme Axios pour effectuer la requête AJAX
+    call(userData).then((res) => {
+      closeModal();
+    });
   };
   return (
     <>
@@ -263,7 +256,7 @@ const SignIn = ({ isOpen, closeModal }: CarDetailsProps) => {
                               htmlFor="address"
                               className="block font-semibold"
                             >
-                              Adresse de livraison
+                              Adresse
                             </label>
                             <textarea
                               id="address"
