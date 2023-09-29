@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useProductContext } from "@context/productContext";
 import Panier from "./Panier";
 import { useUserContext } from "@context/user/userContext";
+import { User } from "../types/modele/user";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,20 @@ const NavBar = () => {
   const { user, login } = useUserContext();
 
   const { products } = useProductContext();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const value = window.localStorage.getItem("user");
+      // console.log("++++++++++++++ get data", JSON.parse(value));
+      if (value !== null) {
+        const userData: User = JSON.parse(value);
+        login(userData);
+      }
+
+      // Faites quelque chose avec la valeur...
+      // const value = window.localStorage.getItem("user");
+    }
+  }, []);
 
   return (
     <header className="w-full bg-purple-100 fixed z-40">

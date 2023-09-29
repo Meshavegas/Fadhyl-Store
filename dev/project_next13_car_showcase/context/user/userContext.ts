@@ -1,3 +1,4 @@
+"use client";
 import { User } from "../../types/modele/user";
 import { createContext, useContext } from "react";
 

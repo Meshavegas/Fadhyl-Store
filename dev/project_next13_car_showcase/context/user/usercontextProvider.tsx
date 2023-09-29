@@ -12,6 +12,7 @@ const UserContextProvider = ({ children }: IProps) => {
 
   const login = (p: User) => {
     setProduct(p);
+    localStorage.setItem("user", JSON.stringify(p));
   };
   return (
     <UserContext.Provider
