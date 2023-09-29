@@ -2,6 +2,7 @@ import { Product } from "../../types/modele/product";
 import { createClient, groq } from "next-sanity";
 import { User } from "../../types/modele/user";
 import configC from "@sanity/config/client";
+import { ProductInOrder } from "../../types/modele/commande";
 
 export async function getProducts(): Promise<Product[]> {
   return configC.fetch(
@@ -54,6 +55,40 @@ export async function createUser(user: User) {
       error
     );
     // throw error; // Propagez l'erreur pour la gérer en amont si nécessaire
+  }
+}
+
+export async function createOrder(
+  userRef: string | undefined,
+  products: ProductInOrder[],
+  total: number,
+  isPaid: boolean
+) {
+  try {
+    const newOrder = {
+      _type: "order",
+      user: {
+        _type: "reference",
+        _ref: userRef, // L'ID de l'utilisateur auquel la commande est associée
+      },
+      products: products.map((productRef) => ({
+        _type: "object",
+        product: {
+          _type: "reference",
+          _ref: productRef.product._id, // Les ID des produits inclus dans la commande
+        },
+        quantity: productRef.quantity, // Mettez la quantité appropriée ici
+      })),
+      total,
+      isPaid,
+    };
+    // Effectuez la mutation pour créer la commande
+    const createdOrder = await conf.create(newOrder);
+
+    return createdOrder;
+  } catch (error) {
+    console.error("Erreur lors de la création de la commande :", error);
+    throw error;
   }
 }
 
