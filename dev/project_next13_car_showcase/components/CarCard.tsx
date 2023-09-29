@@ -70,7 +70,7 @@ const CarCard = ({ produts }: CarCardProps) => {
 
         <div className="car-card__btn-container ">
           <CustomButton
-            title="View More"
+            title="Voir Plus"
             containerStyles="w-full py-[16px] rounded-x-full bg-secondary-orange"
             textStyles="text-white text-[14px] leading-[17px] font-bold"
             rightIcon="/right-arrow.svg"
