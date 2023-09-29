@@ -11,6 +11,7 @@ import {
 } from "@components";
 import { getProducts } from "@sanity/utils/produts";
 import { useEffect } from "react";
+import CardSection from "@components/CardSection";
 
 export default async function Home() {
   // const allCars = await fetchCars({
@@ -45,18 +46,14 @@ export default async function Home() {
         </div>
 
         {!isDataEmpty ? (
-          <section>
-            <div className="home__cars-wrapper">
-              {produts?.map((car, i) => (
-                <CarCard produts={car} key={car._id + i} />
-              ))}
-            </div>
-
-            {/* <ShowMore
-              pageNumber={(searchParams.limit || 10) / 10}
-              isNext={(searchParams.limit || 10) > produts.length}
-            /> */}
-          </section>
+          <>
+            <section>
+              <CardSection />
+            </section>
+            <section className="mt-6 rounded-xl overflow-hidden">
+              <CardSection />
+            </section>
+          </>
         ) : (
           <div className="home__error-container">
             <h2 className="text-black text-xl font-bold">Oops, no results</h2>
