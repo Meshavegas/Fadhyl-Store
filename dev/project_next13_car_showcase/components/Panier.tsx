@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 import { useProductContext } from "@context/productContext";
 import { useUserContext } from "@context/user/userContext";
+import { createOrder } from "@sanity/utils/produts";
 const formattedPrice = new Intl.NumberFormat("cm-CM", {
   style: "currency",
   currency: "XAF",
@@ -15,16 +16,30 @@ interface CarDetailsProps {
   openLogin: () => void;
 }
 const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
-  const { products, addProduct, addOneProduct } = useProductContext();
+  const { products, addProduct, addOneProduct, removeProduct } =
+    useProductContext();
   const { user } = useUserContext();
-  const [formData, setFormData] = useState({
-    email: "" ,
+
+  const initialFormData = {
+    email: user?.email || "", // Utilisez l'opérateur de nullish coalescing (??) pour fournir une valeur par défaut
     ville: "Ville...",
-    tel: "",
-    quartier: "",
-    nom: "",
-  });
-  
+    tel: user?.phone || "",
+    quartier: user?.address || "",
+    nom: user?.name || "",
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    // Vous n'avez pas besoin de recopier toutes les valeurs, mettez à jour simplement 'email' et 'tel'
+    setFormData({
+      ...formData,
+      email: user?.email || "",
+      tel: user?.phone || "",
+      quartier: user?.address || "",
+      nom: user?.name || "",
+    });
+  }, [user]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -65,8 +80,18 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
     addOneProduct(updatedProducts);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    console.log(formData, user, products);
+    console.log(
+      "+++++++++++++++++++++++++++++++++++++++++++",
+      await createOrder(
+        user?._id,
+        products,
+        (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue(),
+        false
+      )
+    );
+
     // Effectuez la requête pour créer un nouvel utilisateur dans votre backend Sanity
     // Utilisez JavaScript ou une bibliothèque comme Axios pour effectuer la requête AJAX
   };
@@ -147,7 +172,7 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                             <div className="relative w-1/5 h-[100px] bg-pattern bg-cover bg-center rounded-lg">
                               <Image
                                 src={e.product.images[0].asset.url}
-                                alt="car model"
+                                alt="model"
                                 fill
                                 priority
                                 className="object-cover"
@@ -156,7 +181,12 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                             <div className=" ml-10 w-4/5 px-2 ">
                               <div className=" text-2xl font-bold flex justify-between items-start w-full  ">
                                 <div className="">{e.product.name}</div>
-                                <div className="">X</div>
+                                <div
+                                  className=" cursor-pointer"
+                                  onClick={() => removeProduct(e.product._id)}
+                                >
+                                  X
+                                </div>
                               </div>
                               <div className="w-fit">
                                 <span className="">Prix :</span>
@@ -211,7 +241,7 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                   )}
                   {currentStep === 2 && (
                     <div className="flex gap-6 justify-center  items-center h-full md:flex-row flex-col  flex-wrap">
-                      <div className="w-1/4 text-2xl font-bold flex-col gap-4">
+                      <div className="md:w-1/4 text-2xl font-bold flex-col gap-4">
                         <div className="flex justify-between ">
                           <div className="">Sous totalt : </div>
                           <div className="">
@@ -243,7 +273,7 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                           </div>
                         </div>
                       </div>
-                      <div className=" border-t-orange-100 border-t-4 w-1/4">
+                      <div className=" border-t-orange-100 border-t-4 w-[95%] md:w-1/4">
                         <div className=" text-3xl font-bold flex justify-between">
                           <div
                             className=" text-3xl font-extrabold bg-red-500  rounded-full text-white px-2 cursor-pointer"
@@ -315,9 +345,9 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                             <input
                               type="text"
                               id="quartier"
-                              name="quartier"
+                              name="Adresse"
                               className="border rounded px-2 py-1 w-full"
-                              value={formData.tel}
+                              value={formData.quartier}
                               onChange={handleChange}
                               required
                             />
@@ -340,7 +370,10 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                             />
                           </div>
                         </div>
-                        <div className=" w-full border text-2xl text-white p-3 cursor-pointer bg-primary-blue ">
+                        <div
+                          className=" w-full border text-2xl text-white p-3 cursor-pointer bg-primary-blue"
+                          onClick={handleSubmit}
+                        >
                           Valider la commander
                         </div>
                       </div>
