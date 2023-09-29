@@ -34,12 +34,20 @@ const ProductContextProvider = ({ children }: IProps) => {
   const addOneProduct = (p: ProductInOrder[]) => {
     setProduct(p);
   };
+
+  const removeProduct = (productId: string) => {
+    const updatedProducts = products.filter(
+      (item) => item.product._id !== productId
+    );
+    setProduct(updatedProducts);
+  };
   return (
     <ProductContext.Provider
       value={{
         products,
         addProduct,
         addOneProduct,
+        removeProduct,
       }}
     >
       {children}
