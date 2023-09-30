@@ -22,7 +22,7 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffledArray;
 }
 
-const CardSection: React.FC = () => {
+const CardSection: React.FC<{ nom: string }> = (props) => {
   const [expanded, setExpanded] = useState(false);
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
@@ -46,7 +46,7 @@ const CardSection: React.FC = () => {
   return (
     <div className=" border-2 mx-4 bg-primary-blue border-b-2 border-secondary-orange">
       <div className="border-b-2 border-secondary-orange px-6 py-2">
-        <div className=" text-white text-4xl font-extrabold ">pagne blanc</div>
+        <div className=" text-white text-4xl font-extrabold ">{props.nom}</div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 px-4">
         {visibleCards?.map((car, i) => (
