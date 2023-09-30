@@ -7,44 +7,20 @@ interface CardProps {
   description: string;
 }
 
-const initialCards: CardProps[] = [
-  {
-    title: "Card 1",
-    description: "Description de la carte 1.",
-  },
-  {
-    title: "Card 2",
-    description: "Description de la carte 2.",
-  },
-  {
-    title: "Card 3",
-    description: "Description de la carte 3.",
-  },
-  {
-    title: "Card 4",
-    description: "Description de la carte 4.",
-  },
-  {
-    title: "Card 5",
-    description: "Description de la carte 5.",
-  },
-  {
-    title: "Card 6",
-    description: "Description de la carte 6.",
-  },
-  {
-    title: "Card 7",
-    description: "Description de la carte 7.",
-  },
-  {
-    title: "Card 8",
-    description: "Description de la carte 8.",
-  },
-  {
-    title: "Card 9",
-    description: "Description de la carte 9.",
-  },
-];
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffledArray = [...array]; // Create a copy of the original array
+
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // Generate a random index
+
+    // Swap elements at i and j
+    const temp = shuffledArray[i];
+    shuffledArray[i] = shuffledArray[j];
+    shuffledArray[j] = temp;
+  }
+
+  return shuffledArray;
+}
 
 const CardSection: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
@@ -63,7 +39,9 @@ const CardSection: React.FC = () => {
     fetchData(); // Appelez la fonction asynchrone
   }, []);
 
-  const visibleCards = expanded ? data : data.slice(0, 4);
+  const visibleCards = expanded
+    ? shuffleArray(data)
+    : shuffleArray(data).slice(0, 4);
 
   return (
     <div className=" border-2 mx-4 bg-primary-blue border-b-2 border-secondary-orange">
@@ -82,15 +60,6 @@ const CardSection: React.FC = () => {
       >
         {expanded ? "Réduire" : "Etendre"}
       </button>
-    </div>
-  );
-};
-
-const Card: React.FC<CardProps> = ({ title, description }) => {
-  return (
-    <div className="bg-white rounded-lg shadow-md p-4 cursor-pointer">
-      <h2 className="text-xl font-semibold">{title}</h2>
-      <p>{description}</p>
     </div>
   );
 };
