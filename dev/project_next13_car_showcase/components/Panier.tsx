@@ -20,6 +20,23 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
     useProductContext();
   const { user } = useUserContext();
 
+  const [datas, setData] = useState({});
+  const [msg, setMsg] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // const [screenSize, setScreenSize] = useState(window.screen.width);
+
+  // state pour validations
+  const [showValidation, setShowValidation] = useState(false);
+
+  const [valid, setValid] = useState(false);
+  const [errorPayement, setErrorPayement] = useState("");
+  const [successPayement, setSuccessPayement] = useState("");
+  const [references, setReferences] = useState("");
+  // const [timerValue, setTimerValue] = useState();
+  const [payCounter, setPayCounter] = useState(300);
+
   const initialFormData = {
     email: user?.email || "", // Utilisez l'opérateur de nullish coalescing (??) pour fournir une valeur par défaut
     ville: "Ville...",
@@ -80,16 +97,154 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
     addOneProduct(updatedProducts);
   };
 
+  let timer: NodeJS.Timeout | undefined;
+  let payTimer: NodeJS.Timeout | undefined;
+
+  const payCheck = async (preference: string) => {
+    try {
+      const res = await fetch(
+        `https://faroty-api.tanouacademy.com/api/v1/check/${preference}`
+      );
+
+      if (!res.ok) {
+        // Gérez le cas où la réponse n'est pas "ok" (c'est-à-dire un code HTTP 200-299)
+        return null;
+      }
+
+      const data = await res.json();
+
+      if (!data.error) {
+        return true;
+      } else if (data.error_msg === "no_payment_received") {
+        return false;
+      } else if (data.error_msg === "payment_request_pending") {
+        return null;
+      } else if (data.error_msg === "no_pay_request_found") {
+        return false;
+      }
+    } catch (error) {
+      // Gérez les erreurs d'exception ici
+      return null;
+    }
+  };
+
+  const onPaySubmit = (status: boolean | undefined): void => {
+    stopPayTimer();
+
+    setReferences("");
+
+    if (status) {
+      // alert('Votre vote a été pris en compte')
+      setSuccessPayement("mercie pour votre cadeaux");
+      setIsSuccess(true);
+      setLoading(false);
+    } else {
+      setErrorPayement("une erreur c'est produite veuillez reesayer");
+      setShowValidation(false);
+      setIsSuccess(false);
+      setLoading(false);
+    }
+  };
+
+  const timerValues = () => {
+    const minutes = Math.floor(payCounter / 60);
+    const seconds = payCounter % 60;
+    return `${minutes < 10 ? "0" + minutes : minutes}:${
+      seconds < 10 ? "0" + seconds : seconds
+    }`;
+  };
+
+  const initPayTimer = () => {
+    setShowValidation(true);
+    payTimer = setInterval(() => {
+      setPayCounter((prevCounter) => prevCounter - 1);
+    }, 1000);
+  };
+
+  const stopPayTimer = () => {
+    clearInterval(payTimer);
+    setPayCounter(5 * 60);
+  };
+
+  const initInterval = (preference: string) => {
+    let count = 0;
+    timer = setInterval(async () => {
+      // console.log(preference);
+
+      const status = await payCheck(preference);
+      if (status !== null) {
+        console.log("satus+++++++++++", status);
+        clearInterval(timer);
+        onPaySubmit(status);
+      }
+      count++;
+
+      if (count >= 5) {
+        clearInterval(timer);
+        onPaySubmit(false);
+      }
+    }, 10000);
+  };
+
+  const handleSubmitPayement = async () => {
+    setErrorPayement("");
+    setLoading(true);
+    const requestOptions: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fhid: "3692428454",
+        amount: 200,
+        fullname: formData.nom,
+        city: formData.quartier,
+        phone: formData.tel,
+      }),
+    };
+
+    try {
+      const response = await fetch(
+        "https://faroty-api.tanouacademy.com/api/v1/join",
+        requestOptions
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la requête.");
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.error) {
+        setErrorPayement(responseData.message);
+        setLoading(false);
+      } else {
+        setValid(true);
+        console.log(responseData);
+        setReferences(responseData.data.reference);
+        initInterval(responseData.data.reference);
+        initPayTimer();
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorPayement(
+        "Une erreur est survenue lors de l'execution de la requête."
+      );
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async () => {
-    console.log(formData, user, products);
+    // console.log(formData, user, products);
+    setLoading(true);
+    handleSubmitPayement();
     console.log(
-      "+++++++++++++++++++++++++++++++++++++++++++",
-      await createOrder(
-        user?._id,
-        products,
-        (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue(),
-        false
-      )
+      "+++++++++++++++++++++++++++++++++++++++++++"
+      // await createOrder(
+      //   user?._id,
+      //   products,
+      //   (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue(),
+      //   false
+      // )
     );
 
     // Effectuez la requête pour créer un nouvel utilisateur dans votre backend Sanity
@@ -239,7 +394,7 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                       </div>
                     </div>
                   )}
-                  {currentStep === 2 && (
+                  {currentStep === 3 && (
                     <div className="flex gap-6 justify-center  items-center h-full md:flex-row flex-col  flex-wrap">
                       <div className="md:w-1/4 text-2xl font-bold flex-col gap-4">
                         <div className="flex justify-between ">
@@ -370,14 +525,56 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                             />
                           </div>
                         </div>
-                        <div
-                          className=" w-full border text-2xl text-white p-3 cursor-pointer bg-primary-blue"
-                          onClick={handleSubmit}
-                        >
-                          Valider la commander
-                        </div>
+                        {loading ? (
+                          <div className="w-full  p-3 cursor-wait bg-[#a9bcc7] flex gap-3 justify-between">
+                            <div
+                              className="loader border-t-2 rounded-full border-gray-500 bg-gray-300 animate-spin
+                        aspect-square w-8 flex justify-center items-center text-yellow-700"
+                            ></div>
+                            <div className=" text-white text-2xl">
+                              Traitement....
+                            </div>
+                            <div className=" text-white text-2xl">
+                              {timerValues()}
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            className=" w-full border text-2xl text-white p-3 cursor-pointer bg-primary-blue"
+                            onClick={handleSubmit}
+                          >
+                            Valider la commander
+                          </div>
+                        )}
                       </div>
-                      {/*  */}
+                    </div>
+                  )}
+                  {currentStep === 2 && (
+                    <div className="flex gap-6 justify-center  items-center h-full md:flex-row flex-col  flex-wrap">
+                      {/* <div className=" flex flex-col justify-center items-center">
+                        <Image
+                          src="/sucess.gif"
+                          alt="logo"
+                          width={69}
+                          height={10}
+                          className="object-cover"
+                        />
+                        <h1 className=" text-2xl font-bold">
+                          Votre commande a ete enregistrer
+                        </h1>
+                      </div> */}
+                      <div className=" flex flex-col justify-center items-center">
+                        <Image
+                          src="/error.gif"
+                          alt="logo"
+                          width={100}
+                          height={100}
+                          className="object-cover"
+                        />
+                        <h1 className=" text-2xl font-bold">
+                          Une erreur s'est produite
+                        </h1>
+                      </div>
                     </div>
                   )}
                 </Dialog.Panel>
