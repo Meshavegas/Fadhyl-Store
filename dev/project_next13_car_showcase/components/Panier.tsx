@@ -6,6 +6,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useProductContext } from "@context/productContext";
 import { useUserContext } from "@context/user/userContext";
 import { createOrder } from "@sanity/utils/produts";
+import axios from "axios";
 const formattedPrice = new Intl.NumberFormat("cm-CM", {
   style: "currency",
   currency: "XAF",
@@ -16,7 +17,7 @@ interface CarDetailsProps {
   openLogin: () => void;
 }
 const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
-  const { products, addProduct, addOneProduct, removeProduct } =
+  const { products, removeAllProduct, addOneProduct, removeProduct } =
     useProductContext();
   const { user } = useUserContext();
 
@@ -47,6 +48,10 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
 
   const [formData, setFormData] = useState(initialFormData);
 
+  const closeM = () => {
+    setCurrentStep(1);
+    closeModal();
+  };
   useEffect(() => {
     // Vous n'avez pas besoin de recopier toutes les valeurs, mettez à jour simplement 'email' et 'tel'
     setFormData({
@@ -102,16 +107,11 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
 
   const payCheck = async (preference: string) => {
     try {
-      const res = await fetch(
+      const res = await axios.get(
         `https://faroty-api.tanouacademy.com/api/v1/check/${preference}`
       );
 
-      if (!res.ok) {
-        // Gérez le cas où la réponse n'est pas "ok" (c'est-à-dire un code HTTP 200-299)
-        return null;
-      }
-
-      const data = await res.json();
+      const data = await res.data;
 
       if (!data.error) {
         return true;
@@ -128,21 +128,32 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
     }
   };
 
-  const onPaySubmit = (status: boolean | undefined): void => {
+  const onPaySubmit = async (status: boolean | undefined) => {
     stopPayTimer();
 
     setReferences("");
+    setCurrentStep(3);
 
     if (status) {
       // alert('Votre vote a été pris en compte')
-      setSuccessPayement("mercie pour votre cadeaux");
       setIsSuccess(true);
+      removeAllProduct();
       setLoading(false);
+      await createOrder(
+        user?._id,
+        products,
+        (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue(),
+        true
+      );
     } else {
-      setErrorPayement("une erreur c'est produite veuillez reesayer");
-      setShowValidation(false);
       setIsSuccess(false);
       setLoading(false);
+      await createOrder(
+        user?._id,
+        products,
+        (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue(),
+        false
+      );
     }
   };
 
@@ -189,40 +200,29 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
   const handleSubmitPayement = async () => {
     setErrorPayement("");
     setLoading(true);
-    const requestOptions: RequestInit = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fhid: "3692428454",
-        amount: 200,
-        fullname: formData.nom,
-        city: formData.quartier,
-        phone: formData.tel,
-      }),
-    };
-
+    // (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue()
     try {
-      const response = await fetch(
+      const response = await axios.post(
         "https://faroty-api.tanouacademy.com/api/v1/join",
-        requestOptions
+        {
+          fhid: "1724627979",
+          amount: 100,
+          fullname: formData.nom,
+          city: formData.quartier,
+          phone: formData.tel + "",
+        }
       );
 
-      if (!response.ok) {
-        throw new Error("Erreur lors de la requête.");
-      }
-
-      const responseData = await response.json();
+      const responseData = await response.data;
 
       if (responseData.error) {
         setErrorPayement(responseData.message);
         setLoading(false);
       } else {
         setValid(true);
-        console.log(responseData);
         setReferences(responseData.data.reference);
         initInterval(responseData.data.reference);
         initPayTimer();
-        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -266,7 +266,7 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10 w-full" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10 w-full" onClose={closeM}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -303,7 +303,7 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                 >
                   <span
                     className="absolute top-2 right-2 z-10 w-fit p-2 bg-primary-blue-100 rounded-full"
-                    onClick={closeModal}
+                    onClick={closeM}
                   >
                     <Image
                       src="/close.svg"
@@ -394,7 +394,7 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                       </div>
                     </div>
                   )}
-                  {currentStep === 3 && (
+                  {currentStep === 2 && (
                     <div className="flex gap-6 justify-center  items-center h-full md:flex-row flex-col  flex-wrap">
                       <div className="md:w-1/4 text-2xl font-bold flex-col gap-4">
                         <div className="flex justify-between ">
@@ -549,32 +549,35 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
                       </div>
                     </div>
                   )}
-                  {currentStep === 2 && (
+                  {currentStep === 3 && (
                     <div className="flex gap-6 justify-center  items-center h-full md:flex-row flex-col  flex-wrap">
-                      {/* <div className=" flex flex-col justify-center items-center">
-                        <Image
-                          src="/sucess.gif"
-                          alt="logo"
-                          width={69}
-                          height={10}
-                          className="object-cover"
-                        />
-                        <h1 className=" text-2xl font-bold">
-                          Votre commande a ete enregistrer
-                        </h1>
-                      </div> */}
-                      <div className=" flex flex-col justify-center items-center">
-                        <Image
-                          src="/error.gif"
-                          alt="logo"
-                          width={100}
-                          height={100}
-                          className="object-cover"
-                        />
-                        <h1 className=" text-2xl font-bold">
-                          Une erreur s'est produite
-                        </h1>
-                      </div>
+                      {isSuccess ? (
+                        <div className=" flex flex-col justify-center items-center">
+                          <Image
+                            src="/sucess.gif"
+                            alt="logo"
+                            width={69}
+                            height={10}
+                            className="object-cover"
+                          />
+                          <h1 className=" text-2xl font-bold">
+                            Votre commande a ete enregistrer
+                          </h1>
+                        </div>
+                      ) : (
+                        <div className=" flex flex-col justify-center items-center">
+                          <Image
+                            src="/error.gif"
+                            alt="logo"
+                            width={100}
+                            height={100}
+                            className="object-cover"
+                          />
+                          <h1 className=" text-2xl font-bold">
+                            Une erreur s'est produite
+                          </h1>
+                        </div>
+                      )}
                     </div>
                   )}
                 </Dialog.Panel>
