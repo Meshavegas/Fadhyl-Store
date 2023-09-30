@@ -41,6 +41,9 @@ const ProductContextProvider = ({ children }: IProps) => {
     );
     setProduct(updatedProducts);
   };
+  const removeAllProduct = () => {
+    setProduct([]);
+  };
   return (
     <ProductContext.Provider
       value={{
@@ -48,6 +51,7 @@ const ProductContextProvider = ({ children }: IProps) => {
         addProduct,
         addOneProduct,
         removeProduct,
+        removeAllProduct,
       }}
     >
       {children}
