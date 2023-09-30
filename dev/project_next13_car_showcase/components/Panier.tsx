@@ -200,13 +200,13 @@ const Panier = ({ isOpen, closeModal, openLogin }: CarDetailsProps) => {
   const handleSubmitPayement = async () => {
     setErrorPayement("");
     setLoading(true);
-    // (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue()
+    //
     try {
       const response = await axios.post(
         "https://faroty-api.tanouacademy.com/api/v1/join",
         {
           fhid: "1724627979",
-          amount: 100,
+          amount: (3000 + totalCartValue()) * 0.1923 + 3000 + totalCartValue(),
           fullname: formData.nom,
           city: formData.quartier,
           phone: formData.tel + "",
