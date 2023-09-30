@@ -48,13 +48,19 @@ export default async function Home() {
         {!isDataEmpty ? (
           <>
             <section className="mt-6">
-              <CardSection />
+              <CardSection nom="Wax" />
             </section>
             <section className="mt-6 rounded-xl overflow-hidden">
-              <CardSection />
+              <CardSection nom="Kente" />
             </section>
             <section className="mt-6 rounded-xl overflow-hidden">
-              <CardSection />
+              <CardSection nom="Want" />
+            </section>
+            <section className="mt-6 rounded-xl overflow-hidden">
+              <CardSection nom="Model" />
+            </section>
+            <section className="mt-6 rounded-xl overflow-hidden">
+              <CardSection nom="Compact" />
             </section>
           </>
         ) : (
